@@ -5,11 +5,14 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot, Stack, Tabs } from "expo-router";
+import { View } from "@/components/Themed";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
 import { useColorScheme } from "@/components/useColorScheme";
+import useFetch from "@/hooks/useFetch";
+import { useStore } from "@/features/auth";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -60,10 +63,25 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-
+  const setUserData = useStore((state: any) => state.setUserData);
+  const { data, isLoading, error } = useFetch({
+    endpoint: "auth/load-user",
+    autoFetch: true,
+    requiresAuth: true,
+  });
+  useEffect(() => {
+    if (data) {
+      setUserData(data);
+    }
+    if (error) {
+      console.log(error);
+    }
+  }, [data]);
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack></Stack>
-    </ThemeProvider>
+    <>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Slot />
+      </ThemeProvider>
+    </>
   );
 }

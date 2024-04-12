@@ -17,16 +17,21 @@ export const COLORS = {
   background: "#F9F9F9",
   black: "#000",
   buttonPrimary: "#ffcb0d",
+  redText: "#ff0000",
+  grayText: "#8A8A8A",
 
   //light theme
   card: "#fff",
   background2: "#F9F9F9",
   text: "#000",
   textLight: "#8A8A8A",
+  backgroundGray: "#dcdcdc",
   title: "#000",
-  borderColor: "rgba(0,0,0,0.1)",
+  borderColor: "rgba(0,0,0,0.2)",
   input: "#f9f9f9",
   placeholder: "rgba(0,0,0,0.5)",
+  borderColor2: "#808080",
+  bluePrimary: "#2f95dc",
 
   //dark theme
   darkCard: "#1C212E",

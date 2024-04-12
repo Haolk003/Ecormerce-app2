@@ -1,12 +1,22 @@
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, Button, View, Text, Pressable } from "react-native";
-import { Link } from "expo-router";
+import {
+  TextInput,
+  Button,
+  View,
+  Text,
+  Pressable,
+  ToastAndroid,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Link, router } from "expo-router";
 import Icon from "@expo/vector-icons/AntDesign";
 import styles from "./login.style";
 import { COLORS, FONTS } from "@/constants";
+import { useStore } from "@/features/auth";
 
 import useFetch from "@/hooks/useFetch";
+
 const LoginScreen = () => {
   const {
     control,
@@ -20,16 +30,22 @@ const LoginScreen = () => {
     autoFetch: false,
     initialBody: null,
   });
+  const setUserData = useStore((state: any) => state.setUserData);
   useEffect(() => {
-    console.log(error);
-  }, [error]);
+    if (error && !isLoading) {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    }
+  }, [error, isLoading]);
   const onSubmit = () => {
     const values = getValues();
     executeFetch("POST", values);
   };
 
   useEffect(() => {
-    console.log(data);
+    if (data) {
+      setUserData(data.user, data.accessToken, data.refeshToken);
+      router.push("/home");
+    }
   }, [data]);
 
   return (

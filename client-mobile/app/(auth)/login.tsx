@@ -1,10 +1,18 @@
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { COLORS, FONTS } from "@/constants";
 import { Text } from "react-native";
 import LoginScreen from "@/components/auth/login/LoginScreen";
-
+import { useStore } from "@/features/auth";
+import { useEffect } from "react";
 export default function Page() {
+  const user = useStore((state: any) => state.user);
+  const router = useRouter();
+  useEffect(() => {
+    if (user) {
+      router.push("/home");
+    }
+  }, [user]);
   return (
     <SafeAreaView>
       <Stack.Screen

@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, View, Text, Pressable } from "react-native";
-import { Link } from "expo-router";
+import {
+  TextInput,
+  View,
+  Text,
+  Pressable,
+  ActivityIndicator,
+  ToastAndroid,
+} from "react-native";
+import { Link, useRouter, useNavigation } from "expo-router";
 import Icon from "@expo/vector-icons/AntDesign";
 import styles from "./signUp.style";
 import { COLORS, FONTS } from "@/constants";
 import useFetch from "@/hooks/useFetch";
+import LoadingScreen from "@/components/LoadingScreen";
 const SignUpScreen = () => {
+  const router = useRouter();
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
     getValues,
+    watch,
+    register,
     formState: { errors },
   } = useForm();
 
@@ -19,12 +31,25 @@ const SignUpScreen = () => {
     initialMethod: "POST",
     autoFetch: false,
     initialBody: null,
+    requiresAuth: false,
   });
-  const onSubmit = () => {
-    const values = getValues();
-    executeFetch("POST", values);
+  const onSubmit = async () => {
+    const email = getValues("email");
+    const name = getValues("name");
+    await executeFetch("POST", { email, name });
   };
 
+  useEffect(() => {
+    if (error && !isLoading) {
+      ToastAndroid.show(String(error), ToastAndroid.CENTER);
+    }
+  }, [error, isLoading]);
+
+  useEffect(() => {
+    if (data) {
+      router.push(`/verify/${String(data.email)}/${String(data.token)}`);
+    }
+  }, [data]);
   return (
     <View style={styles.registerContainer}>
       <View>
@@ -44,7 +69,6 @@ const SignUpScreen = () => {
                 onChangeText={(value) => onChange(value)}
                 value={value}
                 placeholder="Full Name"
-                secureTextEntry
                 style={styles.inputAuth}
               />
             )}
@@ -59,10 +83,8 @@ const SignUpScreen = () => {
             defaultValue=""
           />
         </View>
-        {errors.password && (
-          <Text style={styles.errorText}>
-            {String(errors.password.message)}
-          </Text>
+        {errors.name && (
+          <Text style={styles.errorText}>{String(errors.name.message)}</Text>
         )}
 
         <Text style={styles.label}>Enter your email</Text>
@@ -119,6 +141,7 @@ const SignUpScreen = () => {
           </Text>
         </Pressable>
       </View>
+      {isLoading && <LoadingScreen />}
     </View>
   );
 };
