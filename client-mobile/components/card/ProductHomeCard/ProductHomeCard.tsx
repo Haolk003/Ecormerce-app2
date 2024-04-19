@@ -5,11 +5,11 @@ import Icon from "@expo/vector-icons/build/MaterialIcons";
 import { COLORS } from "@/constants";
 type Props = {
   _id: string;
-  title: string;
-  subTitle: string;
+  name: string;
+
   price: number;
   discount: string;
-  thumbnail: string;
+  imageUrl: string;
   isFavorite: boolean;
 };
 const ProductHomeCard: React.FC<Props> = ({
@@ -17,9 +17,9 @@ const ProductHomeCard: React.FC<Props> = ({
   discount,
   isFavorite,
   price,
-  subTitle,
-  thumbnail,
-  title,
+
+  imageUrl,
+  name,
 }) => {
   return (
     <View style={styles.containerCard}>
@@ -30,10 +30,10 @@ const ProductHomeCard: React.FC<Props> = ({
           <Icon name="favorite-outline" size={20} color={COLORS.dark} />
         )}
       </View>
-      <Image source={{ uri: thumbnail }} style={styles.imageProductCard} />
+      <Image source={{ uri: imageUrl }} style={styles.imageProductCard} />
       <View style={styles.infoProductCard}>
-        <Text style={styles.infoProductsubTitleText}>{subTitle}</Text>
-        <Text style={styles.infoProductTitleText}>{title}</Text>
+        <Text style={styles.infoProductsubTitleText}>Iphone</Text>
+        <Text style={styles.infoProductTitleText}>{name}</Text>
 
         <View style={styles.infoProductPriceContainer}>
           <Text style={styles.infoProductPriceText}>${price}</Text>

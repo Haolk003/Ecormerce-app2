@@ -8,11 +8,12 @@ import { useFonts } from "expo-font";
 import { Slot, Stack, Tabs } from "expo-router";
 import { View } from "@/components/Themed";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import useFetch from "@/hooks/useFetch";
 import { useStore } from "@/features/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -64,7 +65,8 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const setUserData = useStore((state: any) => state.setUserData);
-  const { data, isLoading, error } = useFetch({
+  const [isRequest, setIsRequest] = useState(false);
+  const { data, isLoading, error, executeFetch } = useFetch({
     endpoint: "auth/load-user",
     autoFetch: true,
     requiresAuth: true,
@@ -72,11 +74,12 @@ function RootLayoutNav() {
   useEffect(() => {
     if (data) {
       setUserData(data);
+      setIsRequest(true);
     }
-    if (error) {
-      console.log(error);
+    if (!isRequest) {
+      executeFetch("GET", "");
     }
-  }, [data]);
+  }, [data, AsyncStorage.getItem("access_token")]);
   return (
     <>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
