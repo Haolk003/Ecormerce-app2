@@ -1,12 +1,14 @@
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import _ from "lodash";
+
 const instance = axios.create({
-  baseURL: "http://192.168.30.5:8000/api/v1/",
+  baseURL: "http://192.168.30.7:8000/api/v1/",
   headers: {
     "Content-Type": "application/json",
   },
 });
+
 interface InternalAxiosRequestConfig2<T = any> extends AxiosRequestConfig {
   requiresAuth?: boolean;
 }
@@ -28,7 +30,7 @@ instance.interceptors.request.use(
           return config;
         }
         const response = await axios.post(
-          "http://192.168.30.5:8000/api/v1/auth/refresh-token",
+          "http://192.168.30.7:8000/api/v1/auth/refresh-token",
           {
             refeshToken: JSON.parse(refesh_token as string).token,
           }
@@ -44,6 +46,7 @@ instance.interceptors.request.use(
             JSON.stringify(response.data.data.refreshToken)
           );
           config.headers.Authorization = `Bearer ${response.data.data.accessToken.token}`;
+
           return config;
         }
       } else {

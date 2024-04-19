@@ -14,7 +14,7 @@ export const useStore = create((set, get) => ({
     refesh_token: string
   ) => {
     set({ user: data });
-    console.log(access_token, refesh_token);
+
     await AsyncStorage.setItem("access_token", JSON.stringify(access_token));
     await AsyncStorage.setItem("refresh_token", JSON.stringify(refesh_token));
   },

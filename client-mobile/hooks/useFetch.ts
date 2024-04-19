@@ -26,7 +26,7 @@ const useFetch = ({
   const [isSuccess, setIsSuccess] = useState(false);
   const options = {
     method: method,
-    url: `http://192.168.30.4:8000/api/v1/${endpoint}`,
+    url: `http://192.168.30.7:8000/api/v1/${endpoint}`,
     params: {
       ...query,
     },

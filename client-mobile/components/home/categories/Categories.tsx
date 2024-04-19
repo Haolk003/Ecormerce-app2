@@ -4,7 +4,7 @@ import useFetch from "@/hooks/useFetch";
 import styles from "./categories.style";
 const Categories = () => {
   const { data, error, executeFetch, isLoading, isSuccess } = useFetch({
-    endpoint: "category/get-all",
+    endpoint: "category/get-parents",
     autoFetch: true,
     initialMethod: "GET",
   });
